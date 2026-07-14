@@ -1336,6 +1336,28 @@ function render(){
   <script type="module">
     document.getElementById("google-btn").addEventListener("click", async () => {
   try {
+    const result = await signInWithPopup(auth, provider);
+
+    const user = result.user;
+
+    startApp({
+      name: user.displayName,
+      email: user.email,
+      initials: user.displayName
+        .split(" ")
+        .map(n => n[0])
+        .join("")
+        .toUpperCase(),
+      color: "#6366F1"
+    });
+
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+});
+    document.getElementById("google-btn").addEventListener("click", async () => {
+  try {
     await signInWithPopup(auth, provider);
   } catch (err) {
     console.error(err);
