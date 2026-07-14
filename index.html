@@ -129,35 +129,6 @@
   .auth-fineprint{font-size:11px;color:var(--text-muted);margin-top:24px;line-height:1.6;}
   .auth-fineprint a{color:var(--accent);text-decoration:none;}
 
-  /* Google account picker (mock) */
-  .picker-overlay{
-    position:fixed;inset:0;background:rgba(15,17,23,.5);backdrop-filter:blur(3px);
-    display:flex;align-items:center;justify-content:center;z-index:200;
-    opacity:0;pointer-events:none;transition:opacity .2s;
-  }
-  .picker-overlay.open{opacity:1;pointer-events:auto;}
-  .picker{
-    background:#fff;color:#202124;border-radius:20px;width:100%;max-width:400px;box-shadow:0 24px 60px rgba(0,0,0,.3);
-    transform:translateY(14px) scale(.97);opacity:0;transition:all .3s var(--ease-spring);overflow:hidden;
-  }
-  .picker-overlay.open .picker{transform:translateY(0) scale(1);opacity:1;}
-  .picker-head{padding:28px 24px 16px;text-align:center;}
-  .picker-head svg{margin-bottom:14px;}
-  .picker-head h3{margin:0 0 4px;font-size:17px;font-weight:600;}
-  .picker-head p{margin:0;font-size:12.5px;color:#5F6368;}
-  .picker-list{padding:6px 0;}
-  .picker-item{display:flex;align-items:center;gap:14px;padding:11px 24px;cursor:pointer;transition:background .12s;}
-  .picker-item:hover{background:#F1F3F4;}
-  .picker-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;}
-  .picker-name{font-size:13.5px;font-weight:500;}
-  .picker-email{font-size:11.5px;color:#5F6368;}
-  .picker-item.add{border-top:1px solid #E8EAED;padding-top:14px;margin-top:6px;}
-  .picker-plus{width:36px;height:36px;border-radius:50%;border:1px solid #DADCE0;display:flex;align-items:center;justify-content:center;color:#5F6368;flex-shrink:0;}
-  .picker-foot{padding:14px 24px 20px;font-size:10.5px;color:#5F6368;line-height:1.5;border-top:1px solid #F1F3F4;text-align:center;}
-  .signing-spinner{width:16px;height:16px;border-radius:50%;border:2px solid #DADCE0;border-top-color:#4285F4;animation:spin .7s linear infinite;display:none;}
-  .signing-spinner.show{display:inline-block;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-
   /* ================= APP SHELL ================= */
   .app{display:none;min-height:100vh;}
   .app.active{display:flex;animation:appIn .5s var(--ease-out) both;}
@@ -419,19 +390,6 @@
   </div>
 </div>
 
-<!-- Mock Google account picker -->
-<div class="picker-overlay" id="picker-overlay">
-  <div class="picker">
-    <div class="picker-head">
-      <svg width="75" height="24" viewBox="0 0 75 24"><text x="0" y="18" font-family="Arial" font-size="18" fill="#4285F4">G</text></svg>
-      <h3>Choose an account</h3>
-      <p>to continue to HabitFlow</p>
-    </div>
-    <div class="picker-list" id="picker-list"></div>
-    <div class="picker-foot">To use HabitFlow, sign in with a Google Account.</div>
-  </div>
-</div>
-
 <!-- ================= APP ================= -->
 <div class="app" id="app">
   <aside class="sidebar" id="sidebar">
@@ -597,58 +555,6 @@ document.addEventListener('click', e=>{
   setTimeout(()=>r.remove(),600);
 });
 
-/* ============ MOCK ACCOUNTS ============ */
-const MOCK_ACCOUNTS = [
-  {name:'Alex Rivera', email:'alex.rivera@gmail.com', initials:'AR', color:'#6366F1'},
-  {name:'Jordan Lee', email:'jordan.lee89@gmail.com', initials:'JL', color:'#F59E0B'},
-];
-document.getElementById('picker-list').innerHTML = MOCK_ACCOUNTS.map(a=>
-  `<div class="picker-item" data-email="${a.email}">
-    <div class="picker-avatar" style="background:${a.color}">${a.initials}</div>
-    <div><div class="picker-name">${a.name}</div><div class="picker-email">${a.email}</div></div>
-  </div>`
-).join('') + `
-  <div class="picker-item add" id="picker-add-account">
-    <div class="picker-plus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
-    <div class="picker-name">Use another account</div>
-  </div>`;
-
-document.getElementById('google-btn').onclick = ()=>{
-  document.getElementById('picker-overlay').classList.add('open');
-};
-document.getElementById('picker-overlay').onclick = e=>{
-  if(e.target.id==='picker-overlay') document.getElementById('picker-overlay').classList.remove('open');
-};
-document.querySelectorAll('.picker-item[data-email]').forEach(el=>{
-  el.onclick = ()=>{
-    const acc = MOCK_ACCOUNTS.find(a=>a.email===el.dataset.email);
-    signIn(acc);
-  };
-});
-document.getElementById('picker-add-account').onclick = ()=>{
-  const name = prompt('Enter your name to simulate a new Google account:','Sam Carter');
-  if(!name) return;
-  const email = name.toLowerCase().replace(/\s+/g,'.') + '@gmail.com';
-  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const colors=['#22C55E','#EF4444','#3B82F6','#EC4899','#14B8A6'];
-  signIn({name, email, initials, color:colors[Math.floor(Math.random()*colors.length)]});
-};
-document.getElementById('guest-btn').onclick = ()=>{
-  signIn({name:'Guest', email:'guest@local', initials:'GU', color:'#6B7280'});
-};
-
-function signIn(account){
-  const spinner = document.getElementById('google-spinner');
-  const label = document.getElementById('google-btn-label');
-  document.getElementById('picker-overlay').classList.remove('open');
-  spinner.classList.add('show');
-  label.textContent = 'Signing in…';
-  setTimeout(()=>{
-    localStorage.setItem('habitflow_session', JSON.stringify(account));
-    startApp(account);
-  }, 850);
-}
-
 /* ============ STATE (per-account, starts at zero) ============ */
 const ICONS = ['💧','📚','🧘','🏃','🍎','😴','✍️','🎯','💪','🎸','🧠','🌱','☀️','🚴','🥗','💊'];
 const COLORS = ['#6366F1','#22C55E','#F59E0B','#EF4444','#3B82F6','#EC4899','#14B8A6','#8B5CF6'];
@@ -691,12 +597,6 @@ function startApp(acc){
   document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.classList.toggle('active', el.dataset.view==='dashboard'));
   render();
 }
-
-/* Resume existing session on load */
-(function initSession(){
-  const saved = JSON.parse(localStorage.getItem('habitflow_session')||'null');
-  if(saved){ startApp(saved); }
-})();
 
 /* ============ HELPERS ============ */
 function isDoneToday(h){ return !!h.history[todayStr()]; }
@@ -1285,15 +1185,6 @@ document.getElementById('profile-row').addEventListener('click', e=>{
 document.addEventListener('click', e=>{
   if(!e.target.closest('#profile-row')) document.getElementById('profile-menu').classList.remove('open');
 });
-document.getElementById('signout-btn').onclick = ()=>{
-  localStorage.removeItem('habitflow_session');
-  document.getElementById('app').classList.remove('active');
-  document.getElementById('auth-screen').style.display='flex';
-  document.getElementById('google-spinner').classList.remove('show');
-  document.getElementById('google-btn-label').textContent='Continue with Google';
-  document.getElementById('profile-menu').classList.remove('open');
-  account=null; state=null;
-};
 
 /* ============ DARK MODE ============ */
 function toggleDark(){
@@ -1334,80 +1225,70 @@ function render(){
 }
 </script>
   <script type="module">
-    document.getElementById("google-btn").addEventListener("click", async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-
-    const user = result.user;
-
-    startApp({
-      name: user.displayName,
-      email: user.email,
-      initials: user.displayName
-        .split(" ")
-        .map(n => n[0])
-        .join("")
-        .toUpperCase(),
-      color: "#6366F1"
-    });
-
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
-});
-    document.getElementById("google-btn").addEventListener("click", async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (err) {
-    console.error(err);
-    alert("Google sign-in failed.");
-  }
-});
-    onAuthStateChanged(auth, (user) => {
-  if (!user) return;
-
-  startApp({
-    name: user.displayName,
-    email: user.email,
-    initials: user.displayName
-      .split(" ")
-      .map(n => n[0])
-      .join("")
-      .toUpperCase(),
-    color: "#6366F1"
-  });
-});
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    import {
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
-  const firebaseConfig = {
-    apiKey: "AIzaSyAzsQ_ncFiTseV3SmooZBTSwiBSgO9u02A",
-    authDomain: "habitflow-4c479.firebaseapp.com",
-    projectId: "habitflow-4c479",
-    storageBucket: "habitflow-4c479.firebasestorage.app",
-    messagingSenderId: "280955825864",
-    appId: "1:280955825864:web:b5b3ac3104836908e13ffd",
-    measurementId: "G-T296RH7BC0"
-  };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-    const auth = getAuth(app);
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "...",
+  measurementId: "..."
+};
+
+const app = initializeApp(firebaseConfig);
+getAnalytics(app);
+
+const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+
+/* Google Login */
+document.getElementById("google-btn").addEventListener("click", async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+});
+
+/* Auto Login */
+onAuthStateChanged(auth, (user) => {
+  if (!user) return;
+
+  startApp({
+    name: user.displayName,
+    email: user.email,
+    initials: user.displayName
+      ? user.displayName
+          .split(" ")
+          .map(n => n[0])
+          .join("")
+          .toUpperCase()
+      : "U",
+    color: "#6366F1",
+    photoURL: user.photoURL
+  });
+});
+
+/* Sign Out */
+const signOutBtn = document.getElementById("signout-btn");
+
+if (signOutBtn) {
+  signOutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    location.reload();
+  });
+}
 </script>
 </body>
 </html>
