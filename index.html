@@ -1294,11 +1294,12 @@ onAuthStateChanged(auth, (user) => {
     name: user.displayName,
     email: user.email,
     initials: user.displayName
-        .split(" ")
-        .map(n => n[0])
-        .join("")
-        .toUpperCase(),
+      .split(" ")
+      .map(n => n[0])
+      .join("")
+      .toUpperCase(),
     color: "#6366F1"
+  });
 });
 
 /* Sign Out */
