@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8RNLZ0E40Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8RNLZ0E40Y');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HabitFlow — Build habits that stick</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+
+<!-- ================= AUTH SCREEN ================= -->
+<div class="auth-screen" id="auth-screen">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="auth-card">
+    <div class="auth-mark">H</div>
+    <div class="auth-title">Welcome to HabitFlow</div>
+    <p class="auth-sub">Sign in to start building habits that actually stick. Your dashboard starts fresh, at zero.</p>
+    <button class="google-btn" id="google-btn">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.1 29.6 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.4C29.6 35.4 26.9 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.6 5.1C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.4-2.3 4.4-4.3 5.9l6.6 5.4C41.4 36.4 44 30.7 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+      <span id="google-btn-label">Continue with Google</span>
+      <span class="signing-spinner" id="google-spinner"></span>
+    </button>
+    <div class="auth-divider">or</div>
+    <button class="auth-guest" id="guest-btn">Continue as guest</button>
+    <p class="auth-fineprint">By continuing you agree to HabitFlow's <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">H</div>
+      <div class="brand-name">HabitFlow</div>
+    </div>
+
+    <div class="nav-section-label">Menu</div>
+    <div class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" data-view="today">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Today's habits
+      <span class="badge" id="today-badge">0</span>
+    </div>
+    <div class="nav-item" data-view="statistics">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Statistics
+    </div>
+    <div class="nav-item" data-view="calendar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Calendar
+    </div>
+    <div class="nav-item" data-view="achievements">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5L7 22l5-3 5 3-1.5-8.5"/></svg>
+      Achievements
+    </div>
+    <div class="nav-item" data-view="goals">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+      Goals
+    </div>
+
+    <div class="nav-section-label">Preferences</div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 005 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="dark-toggle">
+        <span>Dark mode</span>
+        <div class="switch" id="dark-switch"><div class="switch-knob"></div></div>
+      </div>
+      <div class="profile-row" id="profile-row">
+        <div class="avatar" id="profile-avatar">A</div>
+        <div>
+          <div class="profile-name" id="profile-name">Alex</div>
+          <div class="profile-sub">Level <span id="side-level">1</span> · <span id="side-xp">0</span> XP</div>
+        </div>
+        <div class="profile-menu" id="profile-menu">
+          <div class="profile-menu-item" id="signout-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+            Sign out
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menu-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="search-input" placeholder="Search habits…" />
+      </div>
+      <div class="topbar-right">
+        <div class="streak-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 3-2 4-2 7a4 4 0 008 0c1.5 2 2 4 2 6a8 8 0 11-16 0c0-4 3-6 4-9 1 1 2 1 4-4z"/></svg>
+          <span id="topbar-streak">0</span> day streak
+        </div>
+        <div class="icon-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+        <button class="btn-primary" id="quick-add-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add habit
+        </button>
+      </div>
+    </div>
+
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- ================= CREATE HABIT MODAL ================= -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2>Create a new habit</h2>
+    <p class="sub">Design a habit that fits naturally into your day.</p>
+    <div class="field">
+      <label>Habit name</label>
+      <input type="text" id="f-name" placeholder="e.g. Read for 20 minutes" />
+    </div>
+    <div class="field">
+      <label>Choose an icon</label>
+      <div class="emoji-grid" id="emoji-grid"></div>
+    </div>
+    <div class="field">
+      <label>Color</label>
+      <div class="color-row" id="color-row"></div>
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <select id="f-category">
+        <option>Health</option>
+        <option>Fitness</option>
+        <option>Mindfulness</option>
+        <option>Productivity</option>
+        <option>Learning</option>
+        <option>Social</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Frequency</label>
+      <div class="freq-row">
+        <button class="chip-btn active" data-freq="Daily">Daily</button>
+        <button class="chip-btn" data-freq="Weekdays">Weekdays</button>
+        <button class="chip-btn" data-freq="Weekends">Weekends</button>
+        <button class="chip-btn" data-freq="Custom">Custom</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Difficulty</label>
+      <div class="freq-row">
+        <button class="chip-btn active" data-diff="Easy">Easy</button>
+        <button class="chip-btn" data-diff="Medium">Medium</button>
+        <button class="chip-btn" data-diff="Hard">Hard</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Notes (optional)</label>
+      <textarea id="f-notes" placeholder="Any details or motivation…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="modal-cancel">Cancel</button>
+      <button class="btn-submit" id="modal-save">Create habit</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+<div class="toast" id="toast"></div>
+<div class="cal-tooltip" id="cal-tooltip"></div>
+
+<!-- Single ES Module entry point. Everything else is imported from here. -->
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>
