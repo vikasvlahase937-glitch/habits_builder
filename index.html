@@ -576,31 +576,14 @@ let modalFreq = 'Daily', modalDiff = 'Easy', modalEmoji = ICONS[0], modalColor =
 let chartInstances = {};
 
 function stateKey(email){ return 'habitflow_state_'+email; }
-async function loadState(uid){
-
-    const ref = doc(db, "users", uid);
-
-    const snap = await getDoc(ref);
-
-    if(snap.exists()){
-        return snap.data();
-    }
-
-    return emptyState_();
+function loadState(email){
+  return JSON.parse(localStorage.getItem(stateKey(email))||'null') || emptyState_();
 }
-async function save(){
+function save(){ localStorage.setItem(stateKey(account.email), JSON.stringify(state)); }
 
-    const ref = doc(db, "users", account.uid);
-
-    await setDoc(ref, state);
-
-}
-
-async function startApp(acc){
-
-    account = acc;
-
-    state = await loadState(acc.uid);
+function startApp(acc){
+  account = acc;
+  state = loadState(acc.email);
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app').classList.add('active');
   document.getElementById('profile-name').textContent = acc.name.split(' ')[0];
@@ -1244,12 +1227,6 @@ function render(){
   <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-  import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -1273,7 +1250,6 @@ getAnalytics(app);
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-    const db = getFirestore(app);
 
 /* Google Login */
 document.getElementById("google-btn").addEventListener("click", async () => {
@@ -1290,15 +1266,17 @@ onAuthStateChanged(auth, (user) => {
   if (!user) return;
 
   startApp({
-    uid: user.uid,
     name: user.displayName,
     email: user.email,
     initials: user.displayName
-      .split(" ")
-      .map(n => n[0])
-      .join("")
-      .toUpperCase(),
-    color: "#6366F1"
+      ? user.displayName
+          .split(" ")
+          .map(n => n[0])
+          .join("")
+          .toUpperCase()
+      : "U",
+    color: "#6366F1",
+    photoURL: user.photoURL
   });
 });
 
